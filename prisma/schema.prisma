@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  //provider = "sqlite"
+  //url      = "file:./dev.db"
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+//*
+model User {
+  supabaseId String     @id @unique
+  role       String     @default("user")
+  photo      String?
+  isBan      Boolean
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  LoginLog   LoginLog[]
+  Media      Media[]    @relation(name: "Create")
+}
+
+model LoginLog {
+  id         Int      @id @default(autoincrement())
+  timestamp  DateTime @default(now())
+  ipAddress  String?
+  supabaseId String?
+  user       User?    @relation(fields: [supabaseId], references: [supabaseId])
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Media     Media[] // One-to-many relationship with Media
+}
+
+model Media {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  photo       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  characters  Character[] // One-to-many relationship with characters
+  userId      String
+  user        User        @relation(fields: [userId], references: [supabaseId], name: "Create")
+  categoryId  Int
+  category    Category    @relation(fields: [categoryId], references: [id])
+}
+
+model Character {
+  id      Int     @id @default(autoincrement())
+  mediaId Int
+  name    String
+  photo   String? // URL or path to the character image
+  media   Media   @relation(fields: [mediaId], references: [id])
+}

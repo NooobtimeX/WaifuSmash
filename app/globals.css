@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply text-lg text-white;
+}
+body {
+  @apply bg-primary;
+}
+button {
+  @apply rounded-xl px-3 py-2;
+}
+input,
+select,
+option {
+  @apply text-primary;
+}
+h1 {
+  @apply text-4xl;
+}
+h2 {
+  @apply text-3xl;
+}
+h3 {
+  @apply text-2xl;
+}
+h4 {
+  @apply text-xl;
+}
+button {
+  @apply bg-accen text-black;
+}
+img {
+  @apply rounded-xl;
+}
